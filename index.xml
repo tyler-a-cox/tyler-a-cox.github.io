@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Academic</title>
+    <title>Tyler Cox</title>
     <link>https://tyler-a-cox.github.io/</link>
       <atom:link href="https://tyler-a-cox.github.io/index.xml" rel="self" type="application/rss+xml" />
-    <description>Academic</description>
+    <description>Tyler Cox</description>
     <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><lastBuildDate>Sat, 01 Jun 2030 13:00:00 +0000</lastBuildDate>
     <image>
-      <url>https://tyler-a-cox.github.io/media/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_2.png</url>
-      <title>Academic</title>
+      <url>https://tyler-a-cox.github.io/media/icon_hu5d76c374add1eed187042683cc43d490_23567_512x512_fill_lanczos_center_2.png</url>
+      <title>Tyler Cox</title>
       <link>https://tyler-a-cox.github.io/</link>
     </image>
     
@@ -29,6 +29,143 @@
 &lt;li&gt;&lt;strong&gt;Embed&lt;/strong&gt; your slides (e.g. Google Slides) or presentation video on this page using &lt;a href=&#34;https://wowchemy.com/docs/writing-markdown-latex/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;shortcodes&lt;/a&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Further event details, including &lt;a href=&#34;https://wowchemy.com/docs/writing-markdown-latex/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;page elements&lt;/a&gt; such as image galleries, can be added to the body of this page.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Spotify Sentiment Analysis</title>
+      <link>https://tyler-a-cox.github.io/project/spotify_analysis/spotify_analysis/</link>
+      <pubDate>Tue, 27 Apr 2021 00:00:00 +0000</pubDate>
+      <guid>https://tyler-a-cox.github.io/project/spotify_analysis/spotify_analysis/</guid>
+      <description>&lt;p&gt;Here&amp;rsquo;s a little text&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import numpy as np
+import pandas as pd
+import pylab as plt
+
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;birdy_uri = &#39;spotify🧑‍🎨2WX2uTcsvV5OnS0inACecP&#39;
+client_id = &#39;b1fbe43b9b514ab4b8b1c2d31b21da6a&#39;
+client_secret = &#39;47cb8fe9c5ca462ea4ee430fc4e6a571&#39;
+spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=client_id, client_secret=client_secret))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;#results = spotify.playlist(&#39;37i9dQZF1DX0XUsuxWHRQd&#39;)
+results = spotify.album(&#39;4Pv7m8D82A1Xun7xNCKZjJ&#39;)
+tracks = results[&#39;tracks&#39;][&#39;items&#39;]
+#features = spotify.audio_features([track[&#39;track&#39;][&#39;id&#39;] for track in tracks])
+features = spotify.audio_features([track[&#39;id&#39;] for track in tracks])
+
+
+data = np.array([[song[key] for key in keys] for song in features])
+data = (data - data.min(0)) / (data.max(0) - data.min(0))
+#songs = [track[&#39;track&#39;][&#39;name&#39;] for track in tracks]
+songs = [track[&#39;name&#39;] for track in tracks]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;keys = [
+    &amp;quot;danceability&amp;quot;,
+    &amp;quot;energy&amp;quot;,
+    &amp;quot;loudness&amp;quot;,
+    &amp;quot;speechiness&amp;quot;,
+    &amp;quot;acousticness&amp;quot;,
+    &amp;quot;instrumentalness&amp;quot;,
+    &amp;quot;liveness&amp;quot;,
+    &amp;quot;valence&amp;quot;,
+    &amp;quot;tempo&amp;quot;,
+]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def sort_songs(start_index, vectors, songs):
+    &amp;quot;&amp;quot;&amp;quot;
+    &amp;quot;&amp;quot;&amp;quot;
+    song_list = [songs[start_index]]
+    next_ind = start_index
+    used = [start_index]
+    for i in range(vectors.shape[0] - 1):
+        indices = np.argsort(np.linalg.norm(vectors - vectors[next_ind], axis=1))
+        for ind in indices:
+            if ind not in used:
+                song_list.append(songs[ind])
+                used.append(ind)
+                next_ind = ind
+                break
+
+    return song_list, used
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;plt.figure(figsize=(10, 6))
+plt.imshow(np.linalg.norm(data[None] - data[:, None, :], axis=2))
+plt.show()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;figure  &gt;
+  &lt;div class=&#34;d-flex justify-content-center&#34;&gt;
+    &lt;div class=&#34;w-100&#34; &gt;&lt;img src=&#34;output_5_0.png&#34; alt=&#34;png&#34; loading=&#34;lazy&#34; data-zoomable /&gt;&lt;/div&gt;
+  &lt;/div&gt;&lt;/figure&gt;
+&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;songs
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;[&#39;Take Me to Church&#39;,
+ &#39;Angel of Small Death and the Codeine Scene&#39;,
+ &#39;Jackie and Wilson&#39;,
+ &#39;Someone New&#39;,
+ &#39;To Be Alone&#39;,
+ &#39;From Eden&#39;,
+ &#39;In a Week (feat. Karen Cowley)&#39;,
+ &#39;Sedated&#39;,
+ &#39;Work Song&#39;,
+ &#39;Like Real People Do&#39;,
+ &#39;It Will Come Back&#39;,
+ &amp;quot;Foreigner&#39;s God&amp;quot;,
+ &#39;Cherry Wine - Live&#39;,
+ &#39;In the Woods Somewhere&#39;,
+ &#39;Run&#39;]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;colors = plt.cm.jet(np.linspace(0, 0.9, data.shape[1]))
+plt.figure(figsize=(10, 6))
+for i in range(data.shape[1]):
+    plt.plot(data[:, i], color=colors[i], label=keys[i])
+
+plt.legend()
+plt.show()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;figure  &gt;
+  &lt;div class=&#34;d-flex justify-content-center&#34;&gt;
+    &lt;div class=&#34;w-100&#34; &gt;&lt;img src=&#34;output_7_0.png&#34; alt=&#34;png&#34; loading=&#34;lazy&#34; data-zoomable /&gt;&lt;/div&gt;
+  &lt;/div&gt;&lt;/figure&gt;
+&lt;/p&gt;
+&lt;h2 id=&#34;analyzing-playlists&#34;&gt;Analyzing Playlists&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;
+&lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>
     
@@ -248,25 +385,6 @@ Three
 &lt;p&gt;Cras aliquam rhoncus ipsum, in hendrerit nunc mattis vitae. Duis vitae efficitur metus, ac tempus leo. Cras nec fringilla lacus. Quisque sit amet risus at ipsum pharetra commodo. Sed aliquam mauris at consequat eleifend. Praesent porta, augue sed viverra bibendum, neque ante euismod ante, in vehicula justo lorem ac eros. Suspendisse augue libero, venenatis eget tincidunt ut, malesuada at lorem. Donec vitae bibendum arcu. Aenean maximus nulla non pretium iaculis. Quisque imperdiet, nulla in pulvinar aliquet, velit quam ultrices quam, sit amet fringilla leo sem vel nunc. Mauris in lacinia lacus.&lt;/p&gt;
 &lt;p&gt;Suspendisse a tincidunt lacus. Curabitur at urna sagittis, dictum ante sit amet, euismod magna. Sed rutrum massa id tortor commodo, vitae elementum turpis tempus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean purus turpis, venenatis a ullamcorper nec, tincidunt et massa. Integer posuere quam rutrum arcu vehicula imperdiet. Mauris ullamcorper quam vitae purus congue, quis euismod magna eleifend. Vestibulum semper vel augue eget tincidunt. Fusce eget justo sodales, dapibus odio eu, ultrices lorem. Duis condimentum lorem id eros commodo, in facilisis mauris scelerisque. Morbi sed auctor leo. Nullam volutpat a lacus quis pharetra. Nulla congue rutrum magna a ornare.&lt;/p&gt;
 &lt;p&gt;Aliquam in turpis accumsan, malesuada nibh ut, hendrerit justo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Quisque sed erat nec justo posuere suscipit. Donec ut efficitur arcu, in malesuada neque. Nunc dignissim nisl massa, id vulputate nunc pretium nec. Quisque eget urna in risus suscipit ultricies. Pellentesque odio odio, tincidunt in eleifend sed, posuere a diam. Nam gravida nisl convallis semper elementum. Morbi vitae felis faucibus, vulputate orci placerat, aliquet nisi. Aliquam erat volutpat. Maecenas sagittis pulvinar purus, sed porta quam laoreet at.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>An example conference paper</title>
-      <link>https://tyler-a-cox.github.io/publication/example/</link>
-      <pubDate>Mon, 01 Jul 2013 00:00:00 +0000</pubDate>
-      <guid>https://tyler-a-cox.github.io/publication/example/</guid>
-      <description>&lt;div class=&#34;alert alert-note&#34;&gt;
-  &lt;div&gt;
-    Click the &lt;em&gt;Cite&lt;/em&gt; button above to demo the feature to enable visitors to import publication metadata into their reference management software.
-  &lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&#34;alert alert-note&#34;&gt;
-  &lt;div&gt;
-    Create your slides in Markdown - click the &lt;em&gt;Slides&lt;/em&gt; button to check out the example.
-  &lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;Supplementary notes can be added here, including &lt;a href=&#34;https://wowchemy.com/docs/writing-markdown-latex/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;code, math, and images&lt;/a&gt;.&lt;/p&gt;
 </description>
     </item>
     
