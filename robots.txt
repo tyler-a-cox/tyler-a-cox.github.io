@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://tyler-a-cox.github.io/al-folio/sitemap.xml
