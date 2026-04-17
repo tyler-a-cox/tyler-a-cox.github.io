@@ -38,7 +38,7 @@ author:
   googlescholar    : "https://scholar.google.com/citations?user=Ts5WousAAAAJ&hl=en"
   inspire-hep      : # URL
   impactstory      : # URL
-  orcid            : "https://orcid.org/yourorcidurl"
+  orcid            : "https://orcid.org/0009-0008-2574-3878"
   semantic         : # URL
   ssrn             : # URL
   pubmed           : # URL
@@ -51,7 +51,7 @@ author:
   bitbucket        : # Username - Update with your username on the site
   codepen          : # Username
   dribbble         : # Username
-  github           : "https://github.com/tyler-a-cox"
+  github           : "tyler-a-cox"
   kaggle           : # Username  
   stackoverflow    : # User number or user number and name (i.e., use "1" or "1/jeff-atwood")    
 
